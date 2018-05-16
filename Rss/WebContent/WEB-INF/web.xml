@@ -1,0 +1,13 @@
+<web-app>  
+  
+<servlet>  
+<servlet-name>rssFeedServlet</servlet-name>  
+<servlet-class>Rss.Rss.RssServlet</servlet-class>  
+</servlet>  
+  
+<servlet-mapping>  
+<servlet-name>rssFeedServlet</servlet-name>  
+<url-pattern>/feed</url-pattern>  
+</servlet-mapping>  
+  
+</web-app>  

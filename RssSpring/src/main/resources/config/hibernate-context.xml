@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+  <aop:config proxy-target-class="true"/>
+
+  <tx:annotation-driven transaction-manager="transactionManager"/>
+
+  <context:component-scan
+      base-package="com.mycompany"/>
+
+  <context:property-placeholder location="classpath:config/jdbc.properties" />
+
+  <bean id="dataSource"
+        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="${jdbc.driverClassName}"/>
+    <property name="url" value="${jdbc.url}"/>
+    <property name="username" value="${jdbc.username}"/>
+    <property name="password" value="${jdbc.password}"/>
+  </bean>
+
+  <bean id="sessionFactory"
+        class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="packagesToScan"
+              value="com.mycompany.wallet"/>
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+        <prop key="hibernate.connection.release_mode">after_transaction</prop>
+        <prop key="hibernate.show_sql">false</prop>
+        <prop key="hibernate.hbm2ddl.auto">update</prop>
+        <prop key="hibernate.jdbc.use_streams_for_binary">true</prop>
+        <prop key="hibernate.jdbc.batch_size">0</prop>
+        
+<!--         <prop key="hibernate.search.default.directory_provider">filesystem</prop> -->
+<!--         <prop key="hibernate.search.default.indexBase">/ucasta/lucene/indexes</prop> -->
+      </props>
+    </property>
+  </bean>
+
+  <bean id="transactionManager"
+        class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory"/>
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
+  
+  <!--
+      Post-processor to perform exception translation on @Repository classes
+      (from native exceptions such as JPA PersistenceExceptions to
+      Spring&rsquo;s DataAccessException hierarchy).
+  -->
+  <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
+  <!-- Translates Hibernate exceptions to Spring Data Access Exceptions -->
+ 	<bean class="org.springframework.orm.hibernate4.HibernateExceptionTranslator"/>
+</beans>

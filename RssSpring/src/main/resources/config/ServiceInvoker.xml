@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="overrideConfigurerInvoker"
+		class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">
+		<property name="location" value="file:/CONFIGS/invokersConf.properties" />
+		<property name="ignoreResourceNotFound" value="true" />
+	</bean>
+
+<!-- 	<bean id="remoteUserListener" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean"> -->
+<!-- 		<property name="serviceUrl" value="http://localhost/services/UserListener"/> -->
+<!-- 		<property name="serviceInterface" value="com.mycompany.wallet.common.transaction.RemoteUserListener"/> -->
+<!-- 	</bean> -->
+	
+</beans>
